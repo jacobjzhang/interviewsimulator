@@ -103,7 +103,8 @@ function showResults(totalTime) {
 function getNextQuestion(count) {
 	if (count < QUESTIONS.length) {
 		$('.question-count').html("Question " + count);
-  	$('.question').html(QUESTIONS[count - 1].text);		
+  	$('.question').html(QUESTIONS[count - 1].text);
+    $('.question-block').addClass('animated headShake');
 	} else {
 		console.log(totalTime);
 		var alert = '<div class="alert alert-dismissible alert-warning">'
@@ -115,10 +116,18 @@ function getNextQuestion(count) {
 	  + '</div>';
 		$('.timer-block').after(alert);
 	}
+  $('.question-block').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+    $(this).removeClass('animated headShake');
+  });
+}
+
+function incrementBar(count) {
+  $('.progress-bar').width(((count/QUESTIONS.length)*100) + '%');
 }
 
 function changeDisplay(count) {
 	getNextQuestion(count);
+  incrementBar(count);
   $('#myModal .modal-title').html("Question #" + QUESTIONS[count - 1].id + " Hint");
   $('#myModal .modal-body').append(QUESTIONS[count - 1].hint);
 }

@@ -57,9 +57,18 @@ var Content = React.createClass({
         <div id="main">
           <h1 className="animated infinite pulse header">shipOrDeliver?</h1>
           <h2 className="animated fadeInRight subheader">Prep for interviews with real questions in a simulation.</h2>
-          <a href="simulation.html">
-            <button className="btn btn-primary">Get Started</button>
-          </a>
+          <div className="btn-group">
+            <a href="#" className="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              Choose Your Role
+              <span className="caret" />
+            </a>
+            <ul className="dropdown-menu">
+              <li><a href="simulation.html">QA Engineer</a></li>
+              <li><a href="#">Sales Engineer</a></li>
+              <li><a href="#">Product Manage</a></li>
+            </ul>
+          </div>
+
         </div>
       </div>
     );
