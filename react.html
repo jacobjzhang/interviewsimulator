@@ -1,0 +1,20 @@
+<div id="container">
+    <!-- This element's contents will be replaced with your component. -->
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react-dom.min.js"></script>
+
+<script type="text/jsx">
+var Hello = React.createClass({
+  render: function() {
+    return <div>Hello {this.props.name}</div>;
+  }
+});
+
+ReactDOM.render(
+  <Hello name="World" />,
+  document.getElementById('container')
+);
+</script>
