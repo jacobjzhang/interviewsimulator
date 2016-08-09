@@ -132,10 +132,13 @@ function changeDisplay(count) {
   $('#myModal .modal-body').html('<p>' + QUESTIONS[count - 1].hint + '</p>');
 }
 
-function init() {
+function simulatorInit() {
   changeDisplay(qCount);
   setTimer();
   clickThroughs();
 }
 
-init();
+function homeAdjust() {
+  var browserHeight = $(window).height();
+  $('#main').height(browserHeight).css('padding-top', browserHeight/3 + 'px');
+}
