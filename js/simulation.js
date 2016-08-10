@@ -69,14 +69,12 @@ function clickThroughs() {
 	$(window).on('keypress', function (event) {
 		if(event.which === 13){
 	 		qCount++;
-	  	changeDisplay(qCount);
 	  	resetTimer();
 	 	}	
 
 	 	if(event.which === 32){
 			console.log('space button');
 	 		qCount--;
-	  	changeDisplay(qCount);
 	  	resetTimer();
 	 	}	
 	});
@@ -125,15 +123,15 @@ function incrementBar(count) {
   $('.progress-bar').width(((count/QUESTIONS.length)*100) + '%');
 }
 
-function changeDisplay(count) {
-	getNextQuestion(count);
-  incrementBar(count);
-  $('#myModal .modal-title').html("Question #" + QUESTIONS[count - 1].id + " Hint");
-  $('#myModal .modal-body').html('<p>' + QUESTIONS[count - 1].hint + '</p>');
-}
+// function changeDisplay(count) {
+// 	getNextQuestion(count);
+//   incrementBar(count);
+//   $('#myModal .modal-title').html("Question #" + QUESTIONS[count - 1].id + " Hint");
+//   $('#myModal .modal-body').html('<p>' + QUESTIONS[count - 1].hint + '</p>');
+// }
 
 function simulatorInit() {
-  changeDisplay(qCount);
+  // changeDisplay(qCount);
   setTimer();
   clickThroughs();
 }

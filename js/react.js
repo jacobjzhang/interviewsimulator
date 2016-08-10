@@ -23,7 +23,7 @@ var Simulation = React.createClass({
     return (
       <div>
         <Nav />
-        <Questions />
+        <Questions data={QUESTIONS} />
         <Answers />
       </div>
     );
@@ -95,6 +95,9 @@ var Content = React.createClass({
 });
 
 var Questions = React.createClass({
+  componentDidMount: function() {
+    qCount++;
+  },
   render: function() {
     return (
 
@@ -104,7 +107,9 @@ var Questions = React.createClass({
         </div>
         <div className="question-block">
           <p className="question-count" />
-          <h1 className="question" />
+          <h1 className="question" data={this.props.data}>
+            {this.props.data[qCount].text}
+          </h1>
         </div>
         <div className="col-md-4 col-md-offset-4">
           <div className="timer-block well">
