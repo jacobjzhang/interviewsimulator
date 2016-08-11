@@ -25,8 +25,14 @@ body {
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 .answer-button {
-	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  margin-right: 10px;
+}
+.next-button {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  margin-left: 10px;
 }
 .instructions {
 	display: block;
@@ -50,6 +56,10 @@ body {
   font-size: 90px;
   color: #fff;
   letter-spacing: -2px;
+}
+.buttonContainer {
+	width: 345px;
+	margin: auto;
 }
 video#bgvid { 
 	position: fixed;

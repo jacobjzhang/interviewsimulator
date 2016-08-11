@@ -1,4 +1,4 @@
-var qCount = 1;
+// var qCount = 1;
 var totalTime = [];
 
 // function youtube() {
@@ -52,43 +52,43 @@ var totalTime = [];
       }
 // }
 
-function setTimer() {
-	$('#count').timer();
-}
+// function setTimer() {
 
-function resetTimer() {
-	totalTime.push({
-		'id' : qCount,
-		'time': $('#count').html()
-	});
-	$('#count').timer('remove');
-	$('#count').timer();
-}
+// }
 
-function clickThroughs() {
-	$(window).on('keypress', function (event) {
-		if(event.which === 13){
-	 		qCount++;
-	  	resetTimer();
-	 	}	
+// function resetTimer() {
+// 	totalTime.push({
+// 		'id' : qCount,
+// 		'time': $('#count').html()
+// 	});
+// 	$('#count').timer('remove');
+// 	$('#count').timer();
+// }
 
-	 	if(event.which === 32){
-			console.log('space button');
-	 		qCount--;
-	  	resetTimer();
-	 	}	
-	});
+// function clickThroughs() {
+// 	$(window).on('keypress', function (event) {
+// 		if(event.which === 13){
+// 	 		qCount++;
+// 	  	resetTimer();
+// 	 	}	
 
-	$('.answer-button').on('click', function(event) {
-		startVideo();
-		totalTime.forEach(function(v, i) {
-			if (v.id === qCount) {
-				v['help'] = true;
-			}
-		})
-	})
+// 	 	if(event.which === 32){
+// 			console.log('space button');
+// 	 		qCount--;
+// 	  	resetTimer();
+// 	 	}	
+// 	});
 
-}
+// 	$('.answer-button').on('click', function(event) {
+// 		startVideo();
+// 		totalTime.forEach(function(v, i) {
+// 			if (v.id === qCount) {
+// 				v['help'] = true;
+// 			}
+// 		})
+// 	})
+
+// }
 
 function showResults(totalTime) {
 	var results = "";
@@ -132,8 +132,8 @@ function incrementBar(count) {
 
 function simulatorInit() {
   // changeDisplay(qCount);
-  setTimer();
-  clickThroughs();
+  // setTimer();
+  // clickThroughs();
 }
 
 function homeAdjust() {
