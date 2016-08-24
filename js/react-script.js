@@ -15,14 +15,34 @@ var Home = React.createClass({
 });
 
 var Simulation = React.createClass({
+  getInitialState: function() {
+    return {
+      qDisplayed: parseInt(this.props.params.id)
+    };
+  },
+  componentWillMount: function() {
+    this.setState({qDisplayed: parseInt(this.props.params.id)});    
+  },
   render: function() {
+    console.log('simulation, running props id ' + this.props.params.id + ' and current state is ' + this.state.qDisplayed);
     return (
       <div>
         <Nav />
-        <QuestionsBlock id={this.props.params.id} />
-        <Answers id={this.props.params.id} />
+        <QuestionsBlock id={this.state.qDisplayed} nextQuestion={this._nextQuestion} getThisQuestion={this._getThisQuestion} handleKeyPress={this._handleKeyPress} />
+        <Answers id={this.state.qDisplayed} />
       </div>
     );
+  },
+  _nextQuestion: function() {
+    this.setState({qDisplayed: (this.state.qDisplayed + 1)});    
+  },
+  _getThisQuestion: function() {
+    this.setState({qDisplayed: parseInt(this.props.params.id)});
+  },
+  _handleKeyPress: function(e) {
+    if (e.charCode === 13) {
+      return this._nextQuestion();  
+    }
   }
 });
 
@@ -119,33 +139,26 @@ var Pagination = React.createClass({
   }
 });
 
-
+// using this.props.id as a single source of truth
 var QuestionsBlock = React.createClass({
-  getInitialState: function() {
-    console.log(this.props.id)
-    return {
-      qCount: parseInt(this.props.id)
-    };
-  },
-  // loads twice, first get a blank canvas, second get the state and props
   componentDidMount: function() {
     this.setState({questions: QUESTIONS});
     $('.container').focus();
   },
+  // loads twice, first get a blank canvas, second get the state and props
   render: function() {
-    if (!this.state.questions) {console.log('no questions yet'); return (<div></div>)}
-    console.log('got the question ' + this.props.id);   
+    if (!this.state) {console.log('no questions yet'); return (<div></div>)}
     return (
       <div>
-        <Pagination id={this.props.id} count={this.state.questions.length} onClick={this._nextQuestion} />
-        <div className="container" onKeyPress={this._handleKeyPress} tabIndex="1">
+        <Pagination id={this.props.id} count={this.state.questions.length} onClick={this.props.getThisQuestion} />
+        <div className="container" onKeyPress={this.props.handleKeyPress} tabIndex="1">
           <div className="progress progress-striped active">
             <div className="progress-bar progress-bar-info" />
           </div>
           <div className="question-block">
             <p className="question-count" />
             <h1 className="question">
-              <Question id={this.props.id} data={this.state.questions[this.state.qCount]} />
+              <Question id={this.props.id} data={this.state.questions[this.props.id]} />
             </h1>
           </div>
           <div className="col-md-4 col-md-offset-4">
@@ -157,7 +170,7 @@ var QuestionsBlock = React.createClass({
               <button type="button" className="btn btn-primary btn-lg answer-button" data-toggle="modal" data-target="#myModal">
                 Need a hint?
               </button>
-              <button type="button" className="btn btn-primary btn-lg next-button" onClick={this._nextQuestion}>
+              <button type="button" className="btn btn-primary btn-lg next-button" onClick={this.props.nextQuestion}>
               Next Question
               </button>
             </div>
@@ -169,16 +182,7 @@ var QuestionsBlock = React.createClass({
         </div>
       </div>
     );
-  },
-  _nextQuestion: function() {
-    this.setState({qCount: (this.state.qCount + 1)});    
-  },
-  _handleKeyPress: function(e) {
-    if (e.charCode === 13) {
-      return this._nextQuestion();  
-    }
   }
-
 });
 
 var Question = React.createClass({
@@ -190,10 +194,8 @@ var Question = React.createClass({
     $('#count').timer();
   },
   render: function(){
-    console.log(this.props.id);
     $('.progress-bar').width(((this.props.id/QUESTIONS.length)*100) + '%');
     $('#count').timer('remove').timer();
-    console.log(this.props.data);
     return( 
       <div>{this.props.data.text}</div>
     );
