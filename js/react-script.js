@@ -1,29 +1,26 @@
-var Page = React.createClass({
+var Home = React.createClass({
   componentDidMount: function() {
-    homeAdjust();
+    var browserHeight = $(window).height();
+    $('#main').height(browserHeight).css('padding-top', browserHeight/3 + 'px');
   },
   render: function() {
     return (
       <div>
         <Video />
         <Nav />
-        <Content />
+        <StartingBlock />
       </div>
     );
   }
 });
 
 var Simulation = React.createClass({
-  componentDidMount: function() {
-    simulatorInit();
-    console.log(this.props.params.id);
-  },
   render: function() {
     return (
       <div>
         <Nav />
         <QuestionsBlock id={this.props.params.id} />
-        <Answers />
+        <Answers id={this.props.params.id} />
       </div>
     );
   }
@@ -35,6 +32,7 @@ var Video = React.createClass({
       <video autoPlay muted loop poster="" id="bgvid">
         <source src="vid/WEBM/Aloha-Mundo.webm" type="video/webm" />
         <source src="vid/WEBM/Aloha-Mundo.mp4" type="video/mp4" />
+        <source src="vid/WEBM/Aloha-Mundo.ogv" type="video/ogv" />
       </video>
     );
   }
@@ -67,7 +65,7 @@ var Nav = React.createClass({
   }
 });
 
-var Content = React.createClass({
+var StartingBlock = React.createClass({
   render: function() {
     return (
 
@@ -81,7 +79,7 @@ var Content = React.createClass({
               <span className="caret" />
             </a>
             <ul className="dropdown-menu">
-              <li><a href="#/simulation">QA Engineer</a></li>
+              <li><a href="#/simulation/1">QA Engineer</a></li>
               <li><a href="#">Sales Engineer</a></li>
               <li><a href="#">Product Manage</a></li>
             </ul>
@@ -102,9 +100,16 @@ var Pagination = React.createClass({
     var pages = this.props.count;
     for (var i = 1; i <= pages; i++) {
       var link = "#/simulation/" + i;
-      list.push(<li><a href={link}>{i}</a></li>);
+      list.push(<li><a href={link} onClick={this.props.onClick}>{i}</a></li>);
     }
-    $('.pagination li').eq(this.props.id).addClass('active');  
+    var id = this.props.id;
+    $('.pagination li').each(function(i, v) {
+      if (i != id) {
+        $(v).removeClass('active');        
+      } else {
+        $(v).addClass('active').removeAttr('href');
+      }
+    });  
     return (
       <ul className="pagination">
         <li className="disabled"><a href="#">«</a></li>
@@ -117,10 +122,12 @@ var Pagination = React.createClass({
 
 var QuestionsBlock = React.createClass({
   getInitialState: function() {
+    console.log(this.props.id)
     return {
-      qCount: 0
+      qCount: parseInt(this.props.id)
     };
   },
+  // loads twice, first get a blank canvas, second get the state and props
   componentDidMount: function() {
     this.setState({questions: QUESTIONS});
     $('.container').focus();
@@ -130,7 +137,7 @@ var QuestionsBlock = React.createClass({
     console.log('got the question ' + this.props.id);   
     return (
       <div>
-        <Pagination id={this.props.id} count={this.state.questions.length} />
+        <Pagination id={this.props.id} count={this.state.questions.length} onClick={this._nextQuestion} />
         <div className="container" onKeyPress={this._handleKeyPress} tabIndex="1">
           <div className="progress progress-striped active">
             <div className="progress-bar progress-bar-info" />
@@ -138,7 +145,7 @@ var QuestionsBlock = React.createClass({
           <div className="question-block">
             <p className="question-count" />
             <h1 className="question">
-              <Question id={this.state.questions.id} count={this.state.qCount} data={this.state.questions[this.state.qCount]} />
+              <Question id={this.props.id} data={this.state.questions[this.state.qCount]} />
             </h1>
           </div>
           <div className="col-md-4 col-md-offset-4">
@@ -176,16 +183,17 @@ var QuestionsBlock = React.createClass({
 
 var Question = React.createClass({
   propTypes: {
-    id: React.PropTypes.number,
-    count: React.PropTypes.number,
+    id: React.PropTypes.string,
     data: React.PropTypes.object
   },
   componentDidMount: function() {
     $('#count').timer();
   },
   render: function(){
-    $('.progress-bar').width(((this.props.count/QUESTIONS.length)*100) + '%');
+    console.log(this.props.id);
+    $('.progress-bar').width(((this.props.id/QUESTIONS.length)*100) + '%');
     $('#count').timer('remove').timer();
+    console.log(this.props.data);
     return( 
       <div>{this.props.data.text}</div>
     );
@@ -194,9 +202,15 @@ var Question = React.createClass({
 
 
 var Answers = React.createClass({
+  getInitialState: function() {
+    return {};
+  },
+  componentDidMount: function() {
+    this.setState({questions: QUESTIONS});
+  },
   render: function() {
+    if (!this.state.questions) {console.log('no questions yet'); return (<div></div>)}
     return (
-
       <div className="modal fade" id="myModal" tabIndex={-1} role="dialog" aria-labelledby="myModalLabel">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -205,8 +219,7 @@ var Answers = React.createClass({
               <h4 className="modal-title" id="myModalLabel">Modal title</h4>
             </div>
             <div className="modal-body">
-              <div id="player" />
-              ...
+              {this.state.questions[this.props.id].hint}
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
@@ -222,7 +235,7 @@ var Answers = React.createClass({
 
 ReactDOM.render((
   <ReactRouter.Router>
-    <ReactRouter.Route path="/" component={Page} />
+    <ReactRouter.Route path="/" component={Home} />
     <ReactRouter.Route path="/simulation/:id" component={Simulation} />
   </ReactRouter.Router>
   ), document.getElementById('page')
