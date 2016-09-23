@@ -23,6 +23,10 @@ var Simulation = React.createClass({
   componentWillMount: function() {
     this.setState({qDisplayed: parseInt(this.props.params.id)});    
   },
+  componentWillReceiveProps: function() {
+    // added callback and it works, not sure why.
+    this.setState({qDisplayed: parseInt(this.props.params.id)}, this._getThisQuestion);
+  },
   render: function() {
     console.log('simulation, running props id ' + this.props.params.id + ' and current state is ' + this.state.qDisplayed);
     return (
@@ -120,7 +124,7 @@ var Pagination = React.createClass({
     var pages = this.props.count;
     for (var i = 1; i <= pages; i++) {
       var link = "#/simulation/" + i;
-      list.push(<li><a href={link} onClick={this.props.onClick}>{i}</a></li>);
+      list.push(<li><a href={link}>{i}</a></li>);
     }
     var id = this.props.id;
     $('.pagination li').each(function(i, v) {
