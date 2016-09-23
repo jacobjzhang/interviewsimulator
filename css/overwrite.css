@@ -80,3 +80,6 @@ video#bgvid {
 .subheader {
 	margin-bottom: 20px;
 }
+.pagination-container {
+  text-align: center;
+}

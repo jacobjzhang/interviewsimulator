@@ -38,7 +38,9 @@ var Simulation = React.createClass({
     );
   },
   _nextQuestion: function() {
-    this.setState({qDisplayed: (this.state.qDisplayed + 1)});    
+    this.setState({qDisplayed: (this.state.qDisplayed + 1)}, function() {
+      window.location.replace('#/simulation/' + this.state.qDisplayed)
+    });    
   },
   _getThisQuestion: function() {
     this.setState({qDisplayed: parseInt(this.props.params.id)});
@@ -154,8 +156,10 @@ var QuestionsBlock = React.createClass({
     if (!this.state) {console.log('no questions yet'); return (<div></div>)}
     return (
       <div>
-        <Pagination id={this.props.id} count={this.state.questions.length} onClick={this.props.getThisQuestion} />
         <div className="container" onKeyPress={this.props.handleKeyPress} tabIndex="1">
+          <div className="pagination-container">
+            <Pagination id={this.props.id} count={this.state.questions.length} onClick={this.props.getThisQuestion} />
+          </div>
           <div className="progress progress-striped active">
             <div className="progress-bar progress-bar-info" />
           </div>
