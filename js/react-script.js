@@ -15,35 +15,21 @@ var Home = React.createClass({
 });
 
 var Simulation = React.createClass({
-  getInitialState: function() {
-    return {
-      qDisplayed: parseInt(this.props.params.id)
-    };
+  questionDisplayed() {
+    return parseInt(this.props.params.id)
   },
-  componentWillMount: function() {
-    this.setState({qDisplayed: parseInt(this.props.params.id)});    
-  },
-  componentWillReceiveProps: function() {
-    // added callback and it works, not sure why.
-    this.setState({qDisplayed: parseInt(this.props.params.id)}, this._getThisQuestion);
-  },
+
   render: function() {
-    console.log('simulation, running props id ' + this.props.params.id + ' and current state is ' + this.state.qDisplayed);
     return (
       <div>
         <Nav />
-        <QuestionsBlock id={this.state.qDisplayed} nextQuestion={this._nextQuestion} getThisQuestion={this._getThisQuestion} handleKeyPress={this._handleKeyPress} />
-        <Answers id={this.state.qDisplayed} />
+        <QuestionsBlock id={this.questionDisplayed()} nextQuestion={this._nextQuestion} handleKeyPress={this._handleKeyPress} />
+        <Answers id={this.questionDisplayed()} />
       </div>
     );
   },
   _nextQuestion: function() {
-    this.setState({qDisplayed: (this.state.qDisplayed + 1)}, function() {
-      window.location.replace('#/simulation/' + this.state.qDisplayed)
-    });    
-  },
-  _getThisQuestion: function() {
-    this.setState({qDisplayed: parseInt(this.props.params.id)});
+    window.location.replace('#/simulation/' + (this.questionDisplayed() + 1));
   },
   _handleKeyPress: function(e) {
     if (e.charCode === 13) {
@@ -84,7 +70,7 @@ var Nav = React.createClass({
               <li><a href="#about">About</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
-          </div>{/*/.nav-collapse */}
+          </div>
         </div>
       </nav>
     );
@@ -198,13 +184,18 @@ var Question = React.createClass({
     id: React.PropTypes.string,
     data: React.PropTypes.object
   },
+  getProgress() {
+    $('.progress-bar').width(((this.props.id/QUESTIONS.length)*100) + '%');
+    $('#count').timer('remove').timer();
+  },
+
   componentDidMount: function() {
     $('#count').timer();
   },
+
   render: function(){
-    $('.progress-bar').width(((this.props.id/QUESTIONS.length)*100) + '%');
-    $('#count').timer('remove').timer();
-    return( 
+    this.getProgress();
+    return(
       <div>{this.props.data.text}</div>
     );
   }
